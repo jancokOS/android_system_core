@@ -189,7 +189,14 @@ LIBLOG_ABI_PUBLIC int android_log_shouldPrintLine (
         const char *tag,
         android_LogPriority pri)
 {
-    return pri >= filterPriForTag(p_format, tag);
+    if (*tag == '\0' ||
+            !strcmp(tag, "AEC_PORT") ||
+            !strcmp(tag, "mm-camera") ||
+            !strcmp(tag, "mm-3a-core") ||
+            strstr(tag, "VSTAB"))
+        return 0;
+    else
+        return pri >= filterPriForTag(p_format, tag);
 }
 
 LIBLOG_ABI_PUBLIC AndroidLogFormat *android_log_format_new()
